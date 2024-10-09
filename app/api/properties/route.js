@@ -8,7 +8,14 @@ export async function POST(request) {
   
   await connectMongoDB();
   
-  // Create a new property with the provided fields
+  // Check if a property with the same name or address already exists
+  const existingProperty = await Property.findOne({ $or: [{ name }, { address }] });
+  
+  if (existingProperty) {
+    return NextResponse.json({ message: "Property already exists" }, { status: 409 });
+  }
+  
+  // Create a new property if it doesn't exist
   await Property.create({ name, price, bedrooms, bathrooms, address, sellerName, sellerEmail, detail, summary, image });
   
   return NextResponse.json({ message: "Property Created" }, { status: 201 });
