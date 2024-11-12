@@ -34,6 +34,13 @@ export async function DELETE(request) {
   
   await connectMongoDB();
 
+  // Find property by ID before attempting to delete
+  const property = await Property.findById(id);
+
+  if (!property) {
+    return NextResponse.json({ message: "Property not found" }, { status: 404 });
+  }
+
   await Property.findByIdAndDelete(id);
 
   return NextResponse.json({ message: "Property Deleted" }, { status: 200 });
