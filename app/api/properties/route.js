@@ -38,7 +38,7 @@ export async function DELETE(request) {
   const property = await Property.findById(id);
 
   if (!property) {
-    return NextResponse.json({ message: "Property not found" }, { status: 404 });
+    return NextResponse.json({ message: "Property not exists" }, { status: 404 });
   }
 
   await Property.findByIdAndDelete(id);
